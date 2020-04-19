@@ -1,0 +1,15 @@
+{
+  "client_id": "YOUR CLIENT ID HERE!",
+  "client_secret": "YOUR CLIENT SECRET HERE!",
+  "usernames_path": "model_generation/data/segmented_output/random_usernames_{i}.txt",
+  "subreddits_score_path": "model_generation/data/segmented_output/scored_subreddits_{i}.json",
+  "num_usernames": 200000,
+  "combined_user_to_subreddit_score_path": "model_generation/data/user_to_subreddit_score.json",
+  "rank_to_subreddit_path": "model_generation/data/rank_to_subreddit.json",
+  "max_subreddits_in_data": 50000,
+  "max_subreddits_in_model": 15000,
+  "max_subreddits_per_user_vector": 50,
+  "method": "hot",
+  "model_path": "model_generation/data/model_output_{method}",
+  "test_pct": 0.2
+}

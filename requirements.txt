@@ -1,0 +1,13 @@
+Flask==1.1.1
+Keras==2.3.1
+Keras-Applications==1.0.8
+Keras-Preprocessing==1.1.0
+tensorboard==2.1.0
+tensorflow==2.1.0
+tensorflow-estimator==2.1.0
+numpy==1.18.1
+pandas==1.0.3
+praw==6.5.1
+prawcore==1.0.1
+progressbar2==3.50.1
+Werkzeug==0.16.0

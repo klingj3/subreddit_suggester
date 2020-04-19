@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Subreddit Suggester</title>
+    <link rel="stylesheet" type="text/css" href="static/css/main.css">
+</head>
+<body>
+<div id="canvas"></div>
+<div class="main">
+    <div class="header">
+        <div class="title">
+            <h1>Subreddit Suggester</h1>
+        </div>
+        <div class="description">
+            <h4>
+                Given a username, suggest subreddits a user is likely to comment or submit items in based on the
+                subreddits of their last 300 comments and 100 submissions.
+            </h4>
+        </div>
+        <div class="name-input">
+            <input id="username" type="text" placeholder="Insert a username here">
+            <div class="button" onclick="getSubreddits(document.getElementById('username').value)">
+                Suggest
+            </div>
+        </div>
+    </div>
+    <div class="results">
+    </div>
+</div>
+</body>
+<script src="https://d3js.org/d3.v5.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script src="static/js/main.js"></script>
+</html>

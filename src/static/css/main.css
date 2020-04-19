@@ -1,0 +1,153 @@
+html {
+    height: 100%;
+    background: linear-gradient(145deg, #151821, #2f3d42, #46535a);
+    animation: background 3s infinite alternate ease-in-out;
+    background-size: 200% 200%;
+}
+
+body {
+    text-align: center;
+    font-family: monospace;
+    font-weight: lighter;
+    color: white;
+    position: fixed;
+    width: 100%;
+}
+
+.button {
+  cursor: pointer;
+  border: 1px;
+  border-color: rgba(255, 255, 255, 0.45);
+  border-style: solid;
+  border-radius: 4px;
+  display: inline-block;
+  font-weight: 600;
+  width: 85px;
+  padding: 15px 0;
+  box-shadow: 0 0 0px rgba(253, 238, 255, 0.2);
+  transition: 0.4s;
+}
+
+.button:hover {
+  color: white;
+  box-shadow: 0 0 20px rgba(253, 238, 255, 0.2);
+  background-color: #849ead;
+}
+
+.main {
+    max-width: 800px;
+    width: 70%;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.main .header {
+    margin-top: 10vh;
+}
+
+.main .description {
+    text-align: left;
+    width: 90%;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.main #username {
+    width: 80%;
+	padding: 15px;
+	border: 1px solid #ccc;
+	border-radius: 3px;
+	margin-bottom: 10px;
+	box-sizing: border-box;
+    font-family: montserrat, sans-serif;
+	color: #2C3E50;
+	font-size: 13px;
+}
+
+.image-container {
+    position: absolute;
+}
+
+#suggestion-table {
+    height: 60vh;
+    text-align: left;
+}
+
+#canvas {
+    position: fixed;
+    height: 100%;
+    width: 100%;
+    z-index: -1;
+}
+
+@keyframes background {
+   0%{background-position:0% 75%}
+   50%{background-position:100% 25%}
+   100%{background-position:25% 100%}
+}
+
+
+table{
+  width:100%;
+  table-layout: fixed;
+}
+.tbl-header{
+  background-color: rgba(255,255,255,0.1);
+ }
+.tbl-content{
+  height:50vh;
+  overflow-x:auto;
+  margin-top: 0px;
+  border: 1px solid rgba(255,255,255,0.3);
+}
+th{
+  pointer-events: none;
+  text-align: left;
+  font-weight: 500;
+  font-size: 12px;
+  color: #fff;
+  text-transform: uppercase;
+}
+tr:hover {
+  background-color: rgba(255, 255, 255, 0.06);
+  cursor: pointer;
+}
+
+td{
+  padding: 15px;
+  text-align: left;
+  vertical-align:middle;
+  font-weight: 300;
+  font-size: 12px;
+  color: #fff;
+  border-bottom: solid 1px rgba(255,255,255,0.1);
+}
+/* for custom scrollbar for webkit browser*/
+
+td {
+    width: 10px;
+}
+
+th {
+    width: 54px;
+    padding: 0px;
+}
+
+td+td {
+    width: auto;
+}
+
+th+th {
+    width: auto;
+    padding: 20px 0px 20px 6px;
+}
+
+::-webkit-scrollbar {
+    width: 6px;
+}
+::-webkit-scrollbar-track {
+    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.2);
+}
+::-webkit-scrollbar-thumb {
+    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.2);
+}
