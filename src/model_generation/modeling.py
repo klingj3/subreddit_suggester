@@ -37,15 +37,15 @@ class SuggestionModeler(object):
             model.add(Embedding(self.config['max_subreddits_in_model']+1, 256,
                                 input_length=self.config['max_subreddits_per_user_vector']))
             model.add(Flatten())
-            model.add(Dense(2048, activation='relu'))
+            model.add(Dense(256, activation='relu'))
             model.add(Dense(self.config['max_subreddits_in_model'], activation='sigmoid'))
             model.compile(loss='binary_crossentropy', optimizer='rmsprop', metrics=['acc'])
         elif self.method == "hot":
             model = Sequential()
-            model.add(Dense(256, activation='relu',
+            model.add(Dense(1024, activation='relu',
                             input_shape=(self.config['max_subreddits_in_model'], )))
             model.add(Dropout(0.4))
-            model.add(Dense(256, activation='relu'))
+            model.add(Dense(1024, activation='relu'))
             model.add(Dropout(0.4))
             model.add(Dense(self.config['max_subreddits_in_model'], activation='sigmoid'))
             model.compile(loss='binary_crossentropy', optimizer='rmsprop', metrics=['acc'])
@@ -131,7 +131,7 @@ class SuggestionModeler(object):
         predictions = self.model.predict(arranged_data)[0]
         predictions = [(self.rank_to_subreddit[i+1], round(float(score), 5), i) for i, score
                        in enumerate(predictions) if self.rank_to_subreddit[i+1] not in user_known_subreddits \
-                       and self.rank_to_sfw_status[i] and i > 200 and self.rank_to_sfw_status[i+1]]
+                       and self.rank_to_sfw_status[i+1] and i > 200]
         predictions.sort(key=lambda x: x[1], reverse=True)
         return predictions
 

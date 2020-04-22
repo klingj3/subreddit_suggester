@@ -34,6 +34,11 @@ body {
   background-color: #849ead;
 }
 
+.loading-message {
+    text-align: center;
+    margin-top: 30px;
+}
+
 .main {
     max-width: 800px;
     width: 70%;

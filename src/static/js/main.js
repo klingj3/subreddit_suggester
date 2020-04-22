@@ -19,8 +19,8 @@ function getSubreddits(username) {
     header.append("th").text("Subreddit");
     header.append("th").text("Confidence");
     table.transition().duration(1000).style("opacity", 1);
-    table.append("div").attr("class", "tbl-content").append("table").append("tbody").text("loading")
-        .style("text-align", "center").style("padding-top", "30px");
+    table.append("div").attr("class", "tbl-content").append("table").append("div").attr("class", "loading-message")
+        .text("loading");
     $.getJSON(`api/suggestions/${username}`, (response) => {
         // Remove old container for these suggestion values, if they exist.
         if (response && response.data) {

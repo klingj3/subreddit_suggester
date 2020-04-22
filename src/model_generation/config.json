@@ -12,5 +12,5 @@
   "max_subreddits_per_user_vector": 50,
   "method": "hot",
   "model_path": "model_generation/data/model_output_{method}.h5",
-  "test_pct": 0.2
+  "test_pct": 0.1
 }
