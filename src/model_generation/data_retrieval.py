@@ -18,7 +18,6 @@ class DataRetriever(object):
         :param worker_no: Int id of worker
         :param num_workers: Int number of workers, dictates division of labor between jobs.
         """
-        print(os.listdir('.'))
         with open("model_generation/config.json", "r") as infile:  #
             self.config = json.loads(infile.read())
         if os.path.exists("model_generation/config_override.json"):
@@ -176,15 +175,7 @@ class DataRetriever(object):
 
         rank_to_subreddit = dict()
         for subreddit, _ in pg.progressbar(subreddit_to_popularity.most_common(minimum_popularity)):
-            is_nsfw = True
-            try:
-                is_nsfw = False  # self.reddit.subreddit(subreddit).over18
-            except Exception:
-                print("Unable to get sfw status for subreddit " + subreddit)
-                pass
-
-            if not is_nsfw:
-                rank_to_subreddit[len(rank_to_subreddit)+1] = subreddit
+            rank_to_subreddit[len(rank_to_subreddit)+1] = subreddit
 
         with open(self.config["rank_to_subreddit_path"], "w") as outfile:
             outfile.write(json.dumps(rank_to_subreddit))
@@ -197,6 +188,27 @@ class DataRetriever(object):
         with open(self.config["combined_user_to_subreddit_score_path"], "w") as outfile:
             outfile.write(json.dumps(output_data))
 
+    def generate_sfw_subreddit_info(self):
+        from time import sleep
+        with open(self.config['rank_to_subreddit_path'], 'r') as infile:
+            rank_to_subreddit = json.loads(infile.read())
+
+        rank_to_sfw_status = dict()
+        for rank, subreddit in pg.progressbar(list(rank_to_subreddit.items())[:self.config['max_subreddits_in_model']]):
+            for _ in range(10):  # Max retries
+                try:
+                    rank_to_sfw_status[rank] = not self.reddit.subreddit(subreddit).over18
+                    break
+                except Exception:
+                    sleep(10)
+                    pass
+            else:
+                print("Max retries exceeded on subreddit " + subreddit)
+                # For safety, assume false.
+                rank_to_sfw_status[rank] = False
+
+        with open(self.config['rank_to_sfw_status'], 'w') as outfile:
+            outfile.write(json.dumps(rank_to_sfw_status))
 
 if __name__ == "__main__":
     import threading
@@ -223,3 +235,4 @@ if __name__ == "__main__":
     data_retriever = DataRetriever(worker_no=0, num_workers=1)
     data_retriever.combine_and_prep_data(highest_num=max_threads)
 
+    data_retriever.generate_sfw_subreddit_info()

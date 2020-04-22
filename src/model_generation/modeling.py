@@ -25,6 +25,9 @@ class SuggestionModeler(object):
             self.rank_to_subreddit = {int(k): v for k, v in self.rank_to_subreddit.items()}
             for rank, subreddit in self.rank_to_subreddit.items():
                 self.subreddit_to_rank[subreddit] = rank
+        with open(self.config['rank_to_sfw_status'], 'r') as infile:
+            self.rank_to_sfw_status = json.loads(infile.read())
+            self.rank_to_sfw_status = {int(k): v for k, v in self.rank_to_sfw_status.items()}
 
         self.method = self.config["method"]
         self.model_path = self.config['model_path'].format(method=self.method)
@@ -39,10 +42,10 @@ class SuggestionModeler(object):
             model.compile(loss='binary_crossentropy', optimizer='rmsprop', metrics=['acc'])
         elif self.method == "hot":
             model = Sequential()
-            model.add(Dense(1024, activation='relu',
+            model.add(Dense(256, activation='relu',
                             input_shape=(self.config['max_subreddits_in_model'], )))
             model.add(Dropout(0.4))
-            model.add(Dense(1024, activation='relu'))
+            model.add(Dense(256, activation='relu'))
             model.add(Dropout(0.4))
             model.add(Dense(self.config['max_subreddits_in_model'], activation='sigmoid'))
             model.compile(loss='binary_crossentropy', optimizer='rmsprop', metrics=['acc'])
@@ -128,7 +131,7 @@ class SuggestionModeler(object):
         predictions = self.model.predict(arranged_data)[0]
         predictions = [(self.rank_to_subreddit[i+1], round(float(score), 5), i) for i, score
                        in enumerate(predictions) if self.rank_to_subreddit[i+1] not in user_known_subreddits \
-                       and i > 200 and i != 607]
+                       and self.rank_to_sfw_status[i] and i > 200 and self.rank_to_sfw_status[i+1]]
         predictions.sort(key=lambda x: x[1], reverse=True)
         return predictions
 
