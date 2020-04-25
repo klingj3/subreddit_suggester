@@ -42,11 +42,9 @@ class SuggestionModeler(object):
             model.compile(loss='binary_crossentropy', optimizer='rmsprop', metrics=['acc'])
         elif self.method == "hot":
             model = Sequential()
-            model.add(Dense(1024, activation='relu',
+            model.add(Dense(512, activation='relu',
                             input_shape=(self.config['max_subreddits_in_model'], )))
-            model.add(Dropout(0.4))
-            model.add(Dense(1024, activation='relu'))
-            model.add(Dropout(0.4))
+            model.add(Dropout(0.5))
             model.add(Dense(self.config['max_subreddits_in_model'], activation='sigmoid'))
             model.compile(loss='binary_crossentropy', optimizer='rmsprop', metrics=['acc'])
         else:
@@ -117,7 +115,7 @@ class SuggestionModeler(object):
 
     def train_model(self, train_data, test_data):
         X, y = train_data
-        self.model.fit(X, y, epochs=10, batch_size=128, verbose=1)
+        self.model.fit(X, y, epochs=5, batch_size=256, verbose=1)
         self.model.save(self.model_path)
         X, y = test_data
         scores = self.model.evaluate(X, y, verbose=1)
