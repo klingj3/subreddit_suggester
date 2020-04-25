@@ -3,7 +3,7 @@ from .modeling import SuggestionModeler
 import json
 
 
-class Suggestor(object):
+class Suggester(object):
 
     def __init__(self):
         self.retriever = DataRetriever()

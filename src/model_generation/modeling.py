@@ -32,15 +32,7 @@ class SuggestionModeler(object):
         self.method = self.config["method"]
         self.model_path = self.config['model_path'].format(method=self.method)
 
-        if self.method == "embedding":
-            model = Sequential()
-            model.add(Embedding(self.config['max_subreddits_in_model']+1, 256,
-                                input_length=self.config['max_subreddits_per_user_vector']))
-            model.add(Flatten())
-            model.add(Dense(256, activation='relu'))
-            model.add(Dense(self.config['max_subreddits_in_model'], activation='sigmoid'))
-            model.compile(loss='binary_crossentropy', optimizer='rmsprop', metrics=['acc'])
-        elif self.method == "hot":
+        if self.method == "hot":
             model = Sequential()
             model.add(Dense(512, activation='relu',
                             input_shape=(self.config['max_subreddits_in_model'], )))
@@ -75,13 +67,7 @@ class SuggestionModeler(object):
         user_subreddit_scores = list(user_subreddit_scores.values())
         random.shuffle(user_subreddit_scores)
 
-        if method == 'embedding':  # Used for input to Embedding layer
-            X = np.zeros((data_length, self.config['max_subreddits_per_user_vector']), dtype=np.uint16)
-            for i, scores in enumerate(user_subreddit_scores):
-                for j, subreddit_key in enumerate(x for x, _ in scores[:self.config['max_subreddits_per_user_vector']]
-                                                  if x < self.config['max_subreddits_in_model']):
-                    X[i][j] = subreddit_key
-        elif method == 'hot':  # Input vector is one-hot encoding.
+        if method == 'hot':  # Input vector is one-hot encoding.
             X = np.zeros((data_length, data_width), dtype=np.bool)
             for i, scores in enumerate(user_subreddit_scores):
                 for subreddit_key, score in scores:
@@ -101,10 +87,6 @@ class SuggestionModeler(object):
     def arrange_user_data(self, user_data):
         user_data = {k: v for k, v in sorted(user_data.items(), key=lambda x: x[1], reverse=True)
                      if 0 < self.subreddit_to_rank.get(k, -1) < self.config['max_subreddits_in_model']}
-        if self.method == 'embedding':
-            data = np.zeros((1, self.config['max_subreddits_per_user_vector']), dtype=np.uint16)
-            for i, subreddit_name in enumerate(list(user_data.keys())[:self.config['max_subreddits_per_user_vector']]):
-                data[0][i] = self.subreddit_to_rank[subreddit_name]
         if self.method == 'hot':
             data = np.zeros((1, self.config['max_subreddits_in_model']), dtype=np.bool)
             for subreddit_name, subreddit_score in user_data.items():
@@ -123,7 +105,6 @@ class SuggestionModeler(object):
         print(scores)
 
     def get_user_predictions(self, user_data):
-        import math
         arranged_data = self.arrange_user_data(user_data)
         user_known_subreddits = set(list(user_data.keys()))
         predictions = self.model.predict(arranged_data)[0]
