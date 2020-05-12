@@ -2,7 +2,7 @@
 
 [Click here to see it in action](http://159.89.246.81/)
 
-This is a recommendation engine for subreddits based on the subreddits to which the user's last 300 comments and 100 posts were submitted. In order to achieve this, these histories were pulled for 200,000 users through the reddit API, and a model in Keras was trained on one-hot-encoded vectors of each user's group of subreddits to establish the relationships between subreddits. 
+This is a recommendation engine for subreddits based on the subreddits to which the user's last 300 comments and 100 posts were submitted. In order to achieve this, these histories were pulled for 200,000 users through the reddit API, and a model in Keras was trained on vectors of each user's group of subreddits to establish the relationships between subreddits. 
 
 ![](docs/example.gif)
 
