@@ -1,6 +1,7 @@
 import json
 import numpy as np
 import os
+import tensorflow as tf
 
 from keras.models import Sequential
 from keras.layers import Dense, Dropout, Embedding, Flatten, Activation, BatchNormalization
@@ -13,6 +14,9 @@ class SuggestionModeler(object):
     data_retrieval.py
     """
     def __init__(self, force_retrain=False):
+        self.session = tf.Session()
+        self.graph = tf.get_default_graph()
+
         with open("model_generation/config.json", "r") as infile:
             self.config = json.loads(infile.read())
         if os.path.exists("config_override.json"):
@@ -52,7 +56,10 @@ class SuggestionModeler(object):
             train_data, test_data = (X_train, y_train), (X_test, y_test)
             print("Starting training process...")
             self.train_model(train_data, test_data)
-        self.model.load_weights(self.model_path)
+
+        with self.graph.as_default():
+            with self.session.as_default():
+                self.model.load_weights(self.model_path)
 
     def arrange_training_data(self, method):
         import random
@@ -107,7 +114,11 @@ class SuggestionModeler(object):
     def get_user_predictions(self, user_data):
         arranged_data = self.arrange_user_data(user_data)
         user_known_subreddits = set(list(user_data.keys()))
-        predictions = self.model.predict(arranged_data)[0]
+
+        with self.graph.as_default():
+            with self.session.as_default():
+                predictions = self.model.predict(arranged_data)[0]
+
         predictions = [(self.rank_to_subreddit[i+1], round(float(score), 5), i) for i, score
                        in enumerate(predictions) if self.rank_to_subreddit[i+1] not in user_known_subreddits \
                        and self.rank_to_sfw_status[i+1] and i > 200]
