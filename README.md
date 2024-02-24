@@ -1,3 +1,7 @@
+### 2024 Addendum
+
+This project will likely not work as it once did if anyone attempts to re-use it due to reddit API changes, I've long since deleted my Reddit account so the demo link below may no longer be functional. 
+
 ### Overview 
 
 [Click here to see it in action](http://159.89.246.81/)
